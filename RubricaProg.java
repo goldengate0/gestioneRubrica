@@ -41,7 +41,7 @@ public class RubricaProg {
 	}
 	
 	//metodo per rimuovere un contatto
-	private static void eliminaContatto(Persona rubrica[], int contaPersone, int startIndex)
+	private static void eliminaContatto(Persona rubrica[], int startIndex, int ultimoIndex)
 	{
 		/* la mia idea per eliminare il contatto è che a partire da quell'indice, vengono 
 		 * traslati di uno, tutti gli altri dati provenienti da destra
@@ -49,23 +49,18 @@ public class RubricaProg {
 		 *  Se il contatto si trova nell'ultima posizione, tutti i campi diventano null */
 		
 		//startIndex indica l'indice da cui partire, non è altro che l'indice dei dati da elimnare
-		if (startIndex < (contaPersone--))
+		
+		//se startIndex è minore di contaPersone, traslo, senno elimina semplicemente l'ultima posizione
+		for (int i = startIndex; i < ultimoIndex; i++)
 		{
-			for (int i = startIndex; i < contaPersone; i++)
-			{
-				//traslo tutti i dati di uno provienienti da destra
-				rubrica[i].setNome(rubrica[i+1].getNome());
-				rubrica[i].setCognome(rubrica[i+1].getCognome());
-				rubrica[i].setEmail(rubrica[i+1].getEmail());
-			}
-			
-			/*l'ultima posizione, dopo aver traslato tutti i dati, contiene un dato doppio,
-			 * in quanto la penultima posizione prende i dati dell'ultima, e l'ultima non riceve modifiche. 
-			 * Bisogna quindi eliminare i dati dell'ultima posizione*/
-			rubrica[contaPersone].setNome(null);
-			rubrica[contaPersone].setCognome(null);
-			rubrica[contaPersone].setEmail(null);
+			//traslo tutti i dati di uno provienienti da destra
+			rubrica[i] = rubrica[i + 1];
 		}
+		
+		/*l'ultima posizione, dopo aver traslato tutti i dati, contiene un dato doppio,
+		 * in quanto la penultima posizione prende i dati dell'ultima, e l'ultima non riceve modifiche. 
+		 * Bisogna quindi eliminare i dati dell'ultima posizione*/
+		rubrica[ultimoIndex] = null;
 	}
 	
 	//metodo per restituire l'indice del contatto cercato
@@ -136,6 +131,7 @@ public class RubricaProg {
 			{
 			//caso in cui l'utente vuole aggiungere una persona
 				case 'A':
+					
 					aggiungiContatto(rubrica, contaPersone);
 					//incremento il valore della conta
 					contaPersone++;
@@ -168,7 +164,7 @@ public class RubricaProg {
 						if (indiceCercato != -1)
 						{
 							//elimino il contatto
-							eliminaContatto(rubrica, contaPersone, indiceCercato);
+							eliminaContatto(rubrica, indiceCercato, contaPersone - 1);
 							//eliminato un contatto, devo anche ridurre il primo indice disponibile
 							contaPersone--;
 						}
